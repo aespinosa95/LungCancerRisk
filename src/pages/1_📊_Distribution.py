@@ -5,6 +5,7 @@ import plotly.graph_objects as go
 import numpy as np
 
 from utils.data_loader import load_data
+from utils.styles import apply_page_style
 
 # =========================
 # Page Config
@@ -15,6 +16,12 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
+# =========================
+# Apply Styles and Navigation
+# =========================
+apply_page_style("Distribution")
+
 
 # =========================
 # Advanced Medical Dashboard CSS

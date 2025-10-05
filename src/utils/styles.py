@@ -595,15 +595,18 @@ def get_navigation_menu(active_page="Home"):
     Returns:
         str: HTML string for the navigation menu
     """
+
     pages = {
-        "Home": {"emoji": "🏠", "url": "/"},
-        "Distribution": {"emoji": "📊", "url": "/Distribution"},
-        "Correlations": {"emoji": "🔄", "url": "/Correlations"},
-        "Clusters": {"emoji": "🎯", "url": "/Clusters"},
-        "Relaciones": {"emoji": "🔍", "url": "/Relaciones"},
-        "Prediction": {"emoji": "🧬", "url": "/Prediction"}
+    "Home": {"emoji": "🏠", "url": "/"},
+    "Distribution": {"emoji": "📊", "url": "/Distribution"},
+    "Correlations": {"emoji": "🔄", "url": "/Correlations"},
+    "Statistical Tests": {"emoji": "📈", "url": "/Statistical_Tests"},
+    "Clusters": {"emoji": "🎯", "url": "/Clusters"},
+    "Prediction": {"emoji": "🧬", "url": "/Prediction"},
+    "Model Performance": {"emoji": "🎓", "url": "/Model Performance"}
     }
-    
+
+
     buttons_html = ""
     for page_name, page_info in pages.items():
         active_class = " active" if page_name == active_page else ""

@@ -371,11 +371,14 @@ st.markdown("""
         <div class="social-section">
             <div class="social-title">Connect With Me</div>
             <div class="social-links">
-                <a href="https://github.com/yourusername" target="_blank" class="social-link" title="GitHub">
+                <a href="https://github.com/aespinosa95/" target="_blank" class="social-link" title="GitHub">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" style="width: 28px; height: 28px;">
                 </a>
-                <a href="https://linkedin.com/in/yourusername" target="_blank" class="social-link" title="LinkedIn">
+                <a href="https://es.linkedin.com/in/asunci%C3%B3n-espinosa-s%C3%A1nchez" target="_blank" class="social-link" title="LinkedIn">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" alt="LinkedIn" style="width: 28px; height: 28px;">
+                </a>
+                <a href="https://espinosasa.wixsite.com/portfolio" target="_blank" class="social-link" title="Portfolio">
+                    <img src="https://cdn-icons-png.flaticon.com/512/841/841364.png" alt="Portfolio" style="width: 28px; height: 28px;">
                 </a>
             </div>
         </div>

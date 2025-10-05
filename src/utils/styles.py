@@ -603,7 +603,7 @@ def get_navigation_menu(active_page="Home"):
     "Statistical Tests": {"emoji": "📈", "url": "/Statistical_Tests"},
     "Clusters": {"emoji": "🎯", "url": "/Clusters"},
     "Prediction": {"emoji": "🧬", "url": "/Prediction"},
-    "Model Performance": {"emoji": "🎓", "url": "/Model Performance"}
+    "Model Performance": {"emoji": "🎓", "url": "/Model_Performance"}
     }
 
 

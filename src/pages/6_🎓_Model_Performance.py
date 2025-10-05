@@ -779,22 +779,28 @@ with col_rec2:
 # Clinical context recommendations
 st.markdown("""
 <div class="warning-box">
-    <strong>⚕️ Clinical Application Considerations:</strong><br><br>
-    
-    <strong>For Screening Programs:</strong><br>
-    • Prioritize <strong>high sensitivity (recall)</strong> to minimize false negatives<br>
-    • Accept lower specificity to avoid missing potential cancer cases<br>
-    • Consider threshold adjustment to increase recall at the cost of precision<br><br>
-    
-    <strong>For Diagnostic Support:</strong><br>
-    • Balance sensitivity and specificity based on clinical context<br>
-    • Use probability scores for risk stratification rather than binary classification<br>
-    • Combine model predictions with clinical expertise and additional diagnostic tests<br><br>
-    
-    <strong>For Resource Allocation:</strong><br>
-    • Prioritize <strong>high precision</strong> to efficiently allocate limited screening resources<br>
-    • Focus on patients with highest predicted risk for intensive follow-up<br>
-    • Use calibrated probabilities to guide intervention intensity
+<strong>⚕️ Clinical Application Considerations:</strong><br><br>
+
+<strong>For Screening Programs:</strong>
+<ul>
+<li>Prioritize <strong>high sensitivity (recall)</strong> to minimize false negatives</li>
+<li>Accept lower specificity to avoid missing potential cancer cases</li>
+<li>Consider threshold adjustment to increase recall at the cost of precision</li>
+</ul>
+
+<strong>For Diagnostic Support:</strong>
+<ul>
+<li>Balance sensitivity and specificity based on clinical context</li>
+<li>Use probability scores for risk stratification rather than binary classification</li>
+<li>Combine model predictions with clinical expertise and additional diagnostic tests</li>
+</ul>
+
+<strong>For Resource Allocation:</strong>
+<ul>
+<li>Prioritize <strong>high precision</strong> to efficiently allocate limited screening resources</li>
+<li>Focus on patients with highest predicted risk for intensive follow-up</li>
+<li>Use calibrated probabilities to guide intervention intensity</li>
+</ul>
 </div>
 """, unsafe_allow_html=True)
 
@@ -1019,23 +1025,23 @@ with col_meth2:
     """, unsafe_allow_html=True)
 
 # Final recommendations
-st.markdown("""
+st.markdown(f"""
 <div class="warning-box">
-    <strong>⚕️ Clinical Implementation Guidelines:</strong><br><br>
-    
-    <strong>1. Model Deployment:</strong> Use the {0} as the primary prediction engine based on its superior 
-    ROC-AUC performance ({1:.3f}). Implement regular retraining on updated patient data.<br><br>
-    
-    <strong>2. Threshold Selection:</strong> For screening applications, consider threshold ≈ 0.3-0.4 to maximize 
-    sensitivity. For diagnostic confirmation, use threshold ≈ 0.6-0.7 to maximize precision.<br><br>
-    
-    <strong>3. Model Monitoring:</strong> Track performance metrics monthly. If ROC-AUC drops below 0.75 or 
-    calibration deteriorates, retrain with recent data.<br><br>
-    
-    <strong>4. Clinical Integration:</strong> Present predictions as probability scores with confidence intervals. 
-    Always combine with clinical judgment, patient history, and additional diagnostic procedures.<br><br>
-    
-    <strong>5. Ethical Considerations:</strong> Ensure model fairness across demographic groups. Regular audits 
-    for bias. Transparent communication of limitations to patients and clinicians.
+<strong>⚕️ Clinical Implementation Guidelines:</strong><br><br>
+
+<strong>1. Model Deployment:</strong> Use the {best_model_name} as the primary prediction engine based on its superior 
+ROC-AUC performance ({best_auc:.3f}). Implement regular retraining on updated patient data.<br><br>
+
+<strong>2. Threshold Selection:</strong> For screening applications, consider threshold ≈ 0.3–0.4 to maximize 
+sensitivity. For diagnostic confirmation, use threshold ≈ 0.6–0.7 to maximize precision.<br><br>
+
+<strong>3. Model Monitoring:</strong> Track performance metrics monthly. If ROC-AUC drops below 0.75 or 
+calibration deteriorates, retrain with recent data.<br><br>
+
+<strong>4. Clinical Integration:</strong> Present predictions as probability scores with confidence intervals. 
+Always combine with clinical judgment, patient history, and additional diagnostic procedures.<br><br>
+
+<strong>5. Ethical Considerations:</strong> Ensure model fairness across demographic groups. Conduct regular bias 
+audits and maintain transparent communication of limitations to patients and clinicians.
 </div>
-""".format(best_model_name, best_auc), unsafe_allow_html=True)
+""", unsafe_allow_html=True)

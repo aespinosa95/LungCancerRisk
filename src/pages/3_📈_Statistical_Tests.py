@@ -19,14 +19,8 @@ st.set_page_config(
 
 apply_page_style("Statistical Tests")
 
-# =========================
-# Load Data
-# =========================
 df = load_data()
 
-# =========================
-# Hero Section
-# =========================
 st.markdown("""
 <div class="hero-section">
     <div class="hero-content">
@@ -39,28 +33,20 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# Info about methodology
 st.markdown("""
 <div class="info-box">
     <strong>🔬 Statistical Methodology:</strong> This section performs hypothesis tests to determine if observed 
     differences between cancer and non-cancer groups are statistically significant or could have occurred by chance. 
-    All tests use α = 0.05 significance level (95% confidence).
+    All tests use alpha = 0.05 significance level (95% confidence).
 </div>
 """, unsafe_allow_html=True)
 
-# =========================
-# Data Preparation
-# =========================
 df_cancer = df[df['lung_cancer'] == 1]
 df_healthy = df[df['lung_cancer'] == 0]
 
-# Separate variables by type
 numerical_vars = ['age']
 categorical_vars = [col for col in df.columns if col not in ['lung_cancer', 'age', 'age_scaled']]
 
-# =========================
-# Quick Summary Statistics
-# =========================
 st.markdown("""
 <div style="margin: 40px 0 10px 0;">
     <div class="section-header">📊 Sample Overview</div>
@@ -103,9 +89,6 @@ with col3:
     </div>
     """, unsafe_allow_html=True)
 
-# =========================
-# Age Analysis (Numerical)
-# =========================
 st.markdown("""
 <div style="margin: 50px 0 10px 0;">
     <div class="section-header">🔢 Age Comparison Analysis</div>
@@ -113,25 +96,20 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# Normality tests
 _, p_normal_cancer = normaltest(df_cancer['age'])
 _, p_normal_healthy = normaltest(df_healthy['age'])
 
 is_normal = (p_normal_cancer > 0.05) and (p_normal_healthy > 0.05)
 
-# Choose appropriate test
 if is_normal:
-    # Independent t-test (parametric)
     t_stat, p_value_age = ttest_ind(df_cancer['age'], df_healthy['age'])
     test_name = "Independent Samples t-test"
     test_type = "Parametric"
 else:
-    # Mann-Whitney U test (non-parametric)
     u_stat, p_value_age = mannwhitneyu(df_cancer['age'], df_healthy['age'], alternative='two-sided')
     test_name = "Mann-Whitney U test"
     test_type = "Non-parametric"
 
-# Calculate effect size (Cohen's d)
 mean_cancer = df_cancer['age'].mean()
 mean_healthy = df_healthy['age'].mean()
 std_cancer = df_cancer['age'].std()
@@ -139,7 +117,6 @@ std_healthy = df_healthy['age'].std()
 pooled_std = np.sqrt((std_cancer**2 + std_healthy**2) / 2)
 cohens_d = (mean_cancer - mean_healthy) / pooled_std
 
-# Interpret effect size
 if abs(cohens_d) < 0.2:
     effect_interpretation = "Negligible"
 elif abs(cohens_d) < 0.5:
@@ -149,7 +126,6 @@ elif abs(cohens_d) < 0.8:
 else:
     effect_interpretation = "Large"
 
-# Display test results
 col_test1, col_test2, col_test3 = st.columns(3)
 
 with col_test1:
@@ -196,19 +172,17 @@ with col_test3:
     </div>
     """, unsafe_allow_html=True)
 
-# Interpretation
 st.markdown(f"""
 <div class="{'info-box' if p_value_age < 0.05 else 'warning-box'}">
     <strong>🔍 Statistical Interpretation:</strong> 
     The {test_name} {'reveals a statistically significant difference' if p_value_age < 0.05 else 'does not show a statistically significant difference'} 
     in age between cancer patients (mean: {mean_cancer:.2f} years) and healthy individuals (mean: {mean_healthy:.2f} years). 
-    P-value = {p_value_age:.4f} {'< 0.05' if p_value_age < 0.05 else '≥ 0.05'}, indicating 
+    P-value = {p_value_age:.4f} {'< 0.05' if p_value_age < 0.05 else '>= 0.05'}, indicating 
     {'we can reject the null hypothesis' if p_value_age < 0.05 else 'we cannot reject the null hypothesis'}. 
     The effect size is {effect_interpretation.lower()} (Cohen's d = {cohens_d:.3f}).
 </div>
 """, unsafe_allow_html=True)
 
-# Visualization
 st.markdown('<div class="chart-container">', unsafe_allow_html=True)
 
 fig_age = go.Figure()
@@ -243,9 +217,6 @@ fig_age.update_layout(
 st.plotly_chart(fig_age, use_container_width=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
-# =========================
-# Categorical Variables (Chi-Square Tests)
-# =========================
 st.markdown("""
 <div style="margin: 50px 0 10px 0;">
     <div class="section-header">🔄 Categorical Variables Association Tests</div>
@@ -253,19 +224,16 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# Perform chi-square tests for all categorical variables
 chi_square_results = []
 
 for var in categorical_vars:
     contingency_table = pd.crosstab(df[var], df['lung_cancer'])
     chi2, p_val, dof, expected = chi2_contingency(contingency_table)
     
-    # Calculate Cramér's V (effect size for chi-square)
     n = contingency_table.sum().sum()
     min_dim = min(contingency_table.shape) - 1
     cramers_v = np.sqrt(chi2 / (n * min_dim)) if min_dim > 0 else 0
     
-    # Odds ratio for 2x2 tables
     if contingency_table.shape == (2, 2):
         a, b = contingency_table.iloc[0, 0], contingency_table.iloc[0, 1]
         c, d = contingency_table.iloc[1, 0], contingency_table.iloc[1, 1]
@@ -278,27 +246,25 @@ for var in categorical_vars:
         'Chi-Square': chi2,
         'P-Value': p_val,
         'Degrees of Freedom': dof,
-        'Cramér\'s V': cramers_v,
+        "Cramer's V": cramers_v,
         'Odds Ratio': odds_ratio,
         'Significant': 'Yes ✓' if p_val < 0.05 else 'No ✗'
     })
 
 results_df = pd.DataFrame(chi_square_results).sort_values('P-Value')
 
-# Summary stats
 significant_vars = results_df[results_df['P-Value'] < 0.05]
 st.markdown(f"""
 <div class="info-box">
     <strong>📋 Summary:</strong> Out of {len(categorical_vars)} categorical variables tested, 
     <strong>{len(significant_vars)}</strong> show statistically significant associations with lung cancer 
-    diagnosis (α = 0.05).
+    diagnosis (alpha = 0.05).
 </div>
 """, unsafe_allow_html=True)
 
-# Display results table
 st.markdown('<div class="data-table-container">', unsafe_allow_html=True)
 
-display_df = results_df[['Variable', 'Chi-Square', 'P-Value', 'Cramér\'s V', 'Odds Ratio', 'Significant']]
+display_df = results_df[['Variable', 'Chi-Square', 'P-Value', "Cramer's V", 'Odds Ratio', 'Significant']]
 
 st.dataframe(
     display_df.style.set_properties(**{
@@ -310,7 +276,7 @@ st.dataframe(
     }).format({
         'Chi-Square': '{:.3f}',
         'P-Value': '{:.4f}',
-        'Cramér\'s V': '{:.3f}',
+        "Cramer's V": '{:.3f}',
         'Odds Ratio': '{:.3f}'
     }, precision=3, na_rep='N/A'),
     use_container_width=True,
@@ -319,9 +285,6 @@ st.dataframe(
 
 st.markdown('</div>', unsafe_allow_html=True)
 
-# =========================
-# Top Significant Associations Visualization
-# =========================
 st.markdown("""
 <div style="margin: 50px 0 10px 0;">
     <div class="section-header">🎯 Top Significant Risk Factors</div>
@@ -329,17 +292,15 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# Get top 8 most significant variables
 top_vars = significant_vars.nsmallest(8, 'P-Value')
 
 if len(top_vars) > 0:
     st.markdown('<div class="chart-container">', unsafe_allow_html=True)
     
-    # Create bar chart of effect sizes
     fig_effect = go.Figure()
     
     fig_effect.add_trace(go.Bar(
-        x=top_vars['Cramér\'s V'],
+        x=top_vars["Cramer's V"],
         y=top_vars['Variable'],
         orientation='h',
         marker=dict(
@@ -354,10 +315,10 @@ if len(top_vars) > 0:
     
     fig_effect.update_layout(
         title=dict(
-            text="<b>Effect Sizes (Cramér's V) for Significant Associations</b>",
+            text="<b>Effect Sizes (Cramer's V) for Significant Associations</b>",
             font=dict(size=18, color="#1e293b")
         ),
-        xaxis_title="Cramér's V (Effect Size)",
+        xaxis_title="Cramer's V (Effect Size)",
         yaxis_title="",
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
@@ -372,13 +333,10 @@ else:
     st.markdown("""
     <div class="warning-box">
         <strong>ℹ️ No Significant Associations:</strong> None of the categorical variables show 
-        statistically significant associations with lung cancer at the α = 0.05 level.
+        statistically significant associations with lung cancer at the alpha = 0.05 level.
     </div>
     """, unsafe_allow_html=True)
 
-# =========================
-# Interactive Variable Explorer
-# =========================
 st.markdown("""
 <div style="margin: 50px 0 10px 0;">
     <div class="section-header">🔬 Detailed Variable Analysis</div>
@@ -397,15 +355,12 @@ selected_var = st.selectbox(
 
 st.markdown('</div>', unsafe_allow_html=True)
 
-# Get the chi-square result for selected variable
 selected_result = results_df[results_df['Variable'] == selected_var].iloc[0]
 
-# Create contingency table
 cont_table = pd.crosstab(df[selected_var], df['lung_cancer'], margins=True, margins_name='Total')
 cont_table.columns = ['Healthy', 'Cancer', 'Total']
 cont_table.index = cont_table.index.map({0: 'No', 1: 'Yes', 'Total': 'Total'})
 
-# Calculate proportions
 prop_table = pd.crosstab(df[selected_var], df['lung_cancer'], normalize='columns') * 100
 prop_table.columns = ['Healthy (%)', 'Cancer (%)']
 prop_table.index = prop_table.index.map({0: 'No', 1: 'Yes'})
@@ -444,23 +399,31 @@ with col_table2:
     )
     st.markdown('</div>', unsafe_allow_html=True)
 
-# Statistical results for selected variable
+odds_info = ""
+if not pd.isna(selected_result['Odds Ratio']):
+    odds_info = f"<br>• <strong>Odds Ratio:</strong> {selected_result['Odds Ratio']:.3f}"
+    
+clinical_interp = ""
+if selected_result['P-Value'] < 0.05:
+    clinical_interp = "This variable shows a significant association with lung cancer diagnosis. "
+    if not pd.isna(selected_result['Odds Ratio']):
+        direction = 'increases' if selected_result['Odds Ratio'] > 1 else 'decreases'
+        clinical_interp += f"The odds ratio indicates that presence of this factor {direction} the odds of cancer by {abs(selected_result['Odds Ratio'] - 1)*100:.1f}%."
+else:
+    clinical_interp = "This variable does not show a significant association with lung cancer."
+
 st.markdown(f"""
 <div class="{'info-box' if selected_result['P-Value'] < 0.05 else 'warning-box'}">
     <strong>🔍 Statistical Results for {selected_var.replace('_', ' ').title()}:</strong><br><br>
     • <strong>Chi-Square Statistic:</strong> {selected_result['Chi-Square']:.3f}<br>
     • <strong>P-Value:</strong> {selected_result['P-Value']:.4f} 
-    {'(Statistically significant at α=0.05)' if selected_result['P-Value'] < 0.05 else '(Not statistically significant)'}<br>
-    • <strong>Cramér\'s V (Effect Size):</strong> {selected_result['Cramér\'s V']:.3f}<br>
-    {'• <strong>Odds Ratio:</strong> ' + f"{selected_result['Odds Ratio']:.3f}" if not pd.isna(selected_result['Odds Ratio']) else ''}<br>
+    {'(Statistically significant at alpha=0.05)' if selected_result['P-Value'] < 0.05 else '(Not statistically significant)'}<br>
+    • <strong>Cramer's V (Effect Size):</strong> {selected_result["Cramer's V"]:.3f}{odds_info}<br>
     <br>
-    <strong>Clinical Interpretation:</strong> 
-    {'This variable shows a significant association with lung cancer diagnosis. ' if selected_result['P-Value'] < 0.05 else 'This variable does not show a significant association with lung cancer. '}
-    {'The odds ratio indicates that presence of this factor ' + ('increases' if selected_result['Odds Ratio'] > 1 else 'decreases') + f" the odds of cancer by {abs(selected_result['Odds Ratio'] - 1)*100:.1f}%." if not pd.isna(selected_result['Odds Ratio']) and selected_result['P-Value'] < 0.05 else ''}
+    <strong>Clinical Interpretation:</strong> {clinical_interp}
 </div>
 """, unsafe_allow_html=True)
 
-# Visualization
 st.markdown('<div class="chart-container">', unsafe_allow_html=True)
 
 fig_var = px.bar(
@@ -484,9 +447,6 @@ fig_var.update_layout(
 st.plotly_chart(fig_var, use_container_width=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
-# =========================
-# Statistical Power Analysis
-# =========================
 st.markdown("""
 <div style="margin: 50px 0 10px 0;">
     <div class="section-header">⚡ Statistical Power Considerations</div>
@@ -525,30 +485,34 @@ with col_power2:
         </div>
         <div style="color: #475569; line-height: 1.7; font-size: 0.95rem;">
             When performing multiple statistical tests simultaneously, there is an increased risk of Type I errors 
-            (false positives). Consider applying <strong>Bonferroni correction</strong> (adjusted α = 0.05/n) or 
+            (false positives). Consider applying <strong>Bonferroni correction</strong> (adjusted alpha = 0.05/n) or 
             <strong>Benjamini-Hochberg FDR</strong> for more conservative inference.
         </div>
     </div>
     """, unsafe_allow_html=True)
 
-# =========================
-# Methodology Notes
-# =========================
 st.markdown("""
 <div class="warning-box">
-    <strong>📖 Statistical Methods Used:</strong><br><br>
-    <strong>1. Age Comparison:</strong><br>
-    • <strong>Normality Test:</strong> D'Agostino-Pearson test to assess normal distribution<br>
-    • <strong>Parametric:</strong> Independent samples t-test (if normal)<br>
-    • <strong>Non-parametric:</strong> Mann-Whitney U test (if non-normal)<br>
-    • <strong>Effect Size:</strong> Cohen's d (small: 0.2, medium: 0.5, large: 0.8)<br><br>
-    
-    <strong>2. Categorical Variables:</strong><br>
-    • <strong>Association Test:</strong> Pearson's Chi-square test for independence<br>
-    • <strong>Effect Size:</strong> Cramér's V (small: 0.1, medium: 0.3, large: 0.5)<br>
-    • <strong>Odds Ratio:</strong> Risk measure for 2×2 contingency tables (OR > 1 indicates increased risk)<br><br>
-    
-    <strong>3. Significance Level:</strong> α = 0.05 (95% confidence)<br>
-    <strong>4. Assumptions:</strong> Independence of observations, adequate expected cell counts (≥5) for chi-square
+<strong>📖 Statistical Methods Used:</strong><br><br>
+
+<strong>1. Age Comparison:</strong>
+<ul>
+<li><strong>Normality Test:</strong> D'Agostino-Pearson test to assess normal distribution</li>
+<li><strong>Parametric:</strong> Independent samples t-test (if normal)</li>
+<li><strong>Non-parametric:</strong> Mann-Whitney U test (if non-normal)</li>
+<li><strong>Effect Size:</strong> Cohen's d (small: 0.2, medium: 0.5, large: 0.8)</li>
+</ul>
+
+<strong>2. Categorical Variables:</strong>
+<ul>
+<li><strong>Association Test:</strong> Pearson's Chi-square test for independence</li>
+<li><strong>Effect Size:</strong> Cramer's V (small: 0.1, medium: 0.3, large: 0.5)</li>
+<li><strong>Odds Ratio:</strong> Risk measure for 2x2 contingency tables (OR &gt; 1 indicates increased risk)</li>
+</ul>
+
+<strong>3. Significance Level:</strong> alpha = 0.05 (95% confidence)<br>
+<strong>4. Assumptions:</strong> Independence of observations, adequate expected cell counts (at least 5) for chi-square
 </div>
 """, unsafe_allow_html=True)
+
+

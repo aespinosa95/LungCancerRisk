@@ -5,17 +5,29 @@ from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 from sklearn.linear_model import LogisticRegression
 import scipy.stats as ss
+import os
 
 # ============================
 # Data Loading & Preprocessing
 # ============================
 
-def load_data(filepath='../data/survey lung cancer_clean.csv'):
+def load_data(clean=True):
     """
     Load and preprocess the lung cancer dataset.
-    
-    Assumes all variables except 'age' are already 0/1 binary.
     """
+    # Base folder relativo al archivo
+    base_path = os.path.join(os.path.dirname(__file__), '..', '..', 'data')
+
+    if clean:
+        filename = 'survey lung cancer_clean.csv'
+    else:
+        filename = 'survey lung cancer.csv'
+
+    filepath = os.path.join(base_path, filename)
+
+    if not os.path.exists(filepath):
+        raise FileNotFoundError(f"Archivo no encontrado: {filepath}")
+
     df = pd.read_csv(filepath)
 
     # Ensure age is numeric

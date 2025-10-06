@@ -301,8 +301,8 @@ See the [LICENSE](LICENSE) file for details.
 
 - 🐙 **GitHub:** [@aespinosa95](https://github.com/aespinosa95)  
 - 💼 **LinkedIn:** [Asunción Espinosa Sánchez](https://www.linkedin.com/in/asuncion-espinosa-sanchez/)  
-- 🌐 **Portfolio:** [asuncionespinosa](espinosasa.wixsite.com/portfolio)  
-- 📁 **Project Link:** [github.com/aespinosa95/lung_cancer](https://github.com/aespinosa95/lung_cancer)  
+- 🌐 **Portfolio:** [asuncionespinosa](https://espinosasa.wixsite.com/portfolio)  
+- 📁 **Project Link:** [lung_cancer repo](https://github.com/aespinosa95/lung_cancer)  
 
 ---
 
@@ -312,7 +312,7 @@ See the [LICENSE](LICENSE) file for details.
 This platform is for **research and educational purposes only**.  
 Predictions should be interpreted by qualified healthcare professionals.
 
-*Made with ❤️ using Streamlit and Python.*
+*Made with using Streamlit and Python.*
 
 </div>
 

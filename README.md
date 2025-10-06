@@ -84,118 +84,144 @@ Non-standard binary encoding required conversion:
 ```python
 binary_cols = [...]
 df[binary_cols] = df[binary_cols].replace({1: 0, 2: 1}).astype('uint8')
+```
 ✅ Result: Uniform encoding and reduced memory footprint.
 
-2️⃣ Class Imbalance
-Problem: 87:13 imbalance → biased predictions.
-Solution:
+---
 
-Stratified cross-validation
+### 2️⃣ Class Imbalance
 
-ROC-AUC + Precision-Recall evaluation
+**Problem:** 87:13 imbalance → biased predictions.  
 
-Adjustable thresholds via dashboard
+**Solution:**
+- Stratified sampling in train/test split  
+- StratifiedKFold cross-validation (5 folds)  
+- Evaluation via ROC-AUC & Precision-Recall metrics  
+- Adjustable classification thresholds via Streamlit dashboard  
 
-3️⃣ Feature Scaling
-python
-Copiar código
+---
+
+### 3️⃣ Feature Scaling
+
+```python
 from sklearn.preprocessing import StandardScaler
 df['age_scaled'] = StandardScaler().fit_transform(df[['age']])
-✅ Improved convergence for SVM & Logistic Regression.
+```
+---
 
-4️⃣ Duplicate Handling
-Removed 33 duplicate entries (10.7%) → 276 unique samples.
+✅ **Result:** Improved convergence for distance-based models (SVM, Logistic Regression).
 
-🔬 Exploratory Data Analysis
-🧓 Age Differences
-Cancer: 62.7 ± 8.2
+---
 
-Healthy: 58.1 ± 9.4
+### 4️⃣ Duplicate Handling
 
-t-test: p < 0.05 → Age is a significant predictor
+Removed **33 duplicate entries (10.7%)** → 276 unique samples.
 
-⚤ Gender Distribution
-Males: 72% of cancer patients
+---
 
-Chi-square: p < 0.01 → Significant association
+## 🔬 Exploratory Data Analysis
 
-🔝 Top 5 Predictive Symptoms
-Symptom	Cancer (%)	Healthy (%)	Odds Ratio	p-value
-Yellow Fingers	91	23	34.8	< 0.001
-Anxiety	89	18	38.5	< 0.001
-Wheezing	92	25	36.2	< 0.001
-Shortness of Breath	88	21	29.1	< 0.001
-Coughing	93	27	40.3	< 0.001
+### 🧓 Age Differences
+- Cancer: **62.7 ± 8.2**  
+- Healthy: **58.1 ± 9.4**  
+- *t-test:* p < 0.05 → Age is a significant predictor  
 
-🔗 Correlations
-Wheezing ↔ Shortness of Breath: r = 0.78
+---
 
-Coughing ↔ Chest Pain: r = 0.72
+### ⚤ Gender Distribution
+- Males: **72% of cancer patients**  
+- *Chi-square:* p < 0.01 → Significant association  
 
-Smoking ↔ Yellow Fingers: r = 0.54
+---
 
-🧩 Clustering Analysis
-K-Means (k=3) revealed distinct patient profiles:
+### 🔝 Top 5 Predictive Symptoms
 
-Cluster 0: High-symptom burden (older, anxiety/fatigue)
+| Symptom | Cancer (%) | Healthy (%) | Odds Ratio | p-value |
+|----------|-------------|--------------|-------------|----------|
+| Yellow Fingers | 91 | 23 | 34.8 | < 0.001 |
+| Anxiety | 89 | 18 | 38.5 | < 0.001 |
+| Wheezing | 92 | 25 | 36.2 | < 0.001 |
+| Shortness of Breath | 88 | 21 | 29.1 | < 0.001 |
+| Coughing | 93 | 27 | 40.3 | < 0.001 |
 
-Cluster 1: Behavioral risk (smoking/alcohol, younger)
+---
 
-Cluster 2: Moderate presentation
+### 🔗 Correlations
 
-🎯 Key Findings
-13 binary symptoms significantly associated (p < 0.05)
+- Wheezing ↔ Shortness of Breath: **r = 0.78**  
+- Coughing ↔ Chest Pain: **r = 0.72**  
+- Smoking ↔ Yellow Fingers: **r = 0.54**
 
-Age and Gender are key demographic predictors
+---
 
-Top Model: Gradient Boosting
+### 🧩 Clustering Analysis
 
-Metric	Score	Interpretation
-ROC-AUC	0.947	Excellent discrimination
-Accuracy	91.3%	High correctness
-Precision	94.8%	Few false positives
-Recall	95.1%	Few missed cases
-F1-Score	0.950	Balanced performance
+Unsupervised **K-Means (k=3)** revealed distinct patient profiles:
 
-🖥️ Dashboard Features
-Page	Description
-🏠 Home	Summary KPIs & dataset overview
-📊 Distribution	Histograms, boxplots, and descriptive stats
-🔄 Correlations	Heatmaps and pairwise associations
-📈 Statistical Tests	t-tests, Chi-square, Mann-Whitney U
-🎯 Clusters	3D PCA + radar charts
-🧬 Prediction	ML-based risk calculator
-🎓 Model Performance	ROC curves, calibration, confusion matrix
+- **Cluster 0:** High-symptom burden (older, anxiety/fatigue)  
+- **Cluster 1:** Behavioral risk (smoking/alcohol, younger)  
+- **Cluster 2:** Moderate presentation  
 
-🎨 Interactive visuals include:
+---
 
-3D PCA plots
+## 🎯 Key Findings
 
-Feature importance bars
+- 13 binary symptoms significantly associated (*p < 0.05*)  
+- Age and Gender are key demographic predictors  
+- **Top Model:** Gradient Boosting  
 
-Radar charts
+| Metric | Score | Interpretation |
+|---------|-------|----------------|
+| ROC-AUC | 0.947 | Excellent discrimination |
+| Accuracy | 91.3% | High correctness |
+| Precision | 94.8% | Few false positives |
+| Recall | 95.1% | Few missed cases |
+| F1-Score | 0.950 | Balanced performance |
 
-Calibration curves
+---
 
-🚀 Installation
-bash
-Copiar código
-# 1. Clone repo
+## 🖥️ Dashboard Features
+
+| Page | Description |
+|------|--------------|
+| 🏠 Home | Summary KPIs & dataset overview |
+| 📊 Distribution | Histograms, boxplots, descriptive stats |
+| 🔄 Correlations | Heatmaps and pairwise associations |
+| 📈 Statistical Tests | t-tests, Chi-square, Mann-Whitney U |
+| 🎯 Clusters | 3D PCA + radar charts |
+| 🧬 Prediction | ML-based risk calculator |
+| 🎓 Model Performance | ROC curves, calibration, confusion matrix |
+
+---
+
+### 🎨 Interactive visuals include:
+- 3D PCA plots  
+- Feature importance bars  
+- Radar charts  
+- Calibration curves  
+
+---
+
+## 🚀 Installation
+
+```bash
+# 1. Clone repository
 git clone https://github.com/aespinosa95/lung_cancer.git
 cd lung_cancer
 
-# 2. Create environment
+# 2. Create virtual environment
 python -m venv lungcancer
-source lungcancer/bin/activate  # (Windows: lungcancer\Scripts\activate)
+source lungcancer/bin/activate  # On Windows: lungcancer\Scripts\activate
 
 # 3. Install dependencies
 pip install -r requirements.txt
 
-# 4. Run dashboard
+# 4. Launch the Streamlit dashboard
 streamlit run src/Home.py
-📁 Project Structure
-bash
-Copiar código
+```
+## 📁 Project Structure
+
+```text
 lung_cancer/
 ├── data/
 │   ├── survey lung cancer.csv
@@ -209,74 +235,84 @@ lung_cancer/
 ├── requirements.txt
 ├── README.md
 └── LICENSE
-🛠️ Technologies
-Tool	Purpose
-Python 3.12+	Core language
-Streamlit	Dashboard framework
-Pandas / NumPy	Data handling
-Scikit-learn	ML algorithms
-Plotly / Matplotlib / Seaborn	Visualization
-SciPy	Statistical testing
+```
 
-🔮 Future Enhancements
-Q2 2025
-SHAP explainability
+---
 
-EHR integration
+## 🛠️ Technologies
 
-PDF clinical reports
+| Tool | Purpose |
+|------|---------|
+| Python 3.12+ | Core language |
+| Streamlit | Dashboard framework |
+| Pandas / NumPy | Data handling |
+| Scikit-learn | ML algorithms |
+| Plotly / Matplotlib / Seaborn | Visualization |
+| SciPy | Statistical testing |
 
-Multilingual UI
+---
 
-Q3–Q4 2025
-Deep Learning & XGBoost
+## 🔮 Future Enhancements
 
-Survival analysis
+### Q2 2025
+- SHAP explainability  
+- EHR integration  
+- PDF clinical reports  
+- Multilingual UI  
 
-External dataset validation
+### Q3–Q4 2025
+- Deep Learning & XGBoost  
+- Survival analysis  
+- External dataset validation  
 
-2026
-Real-time prediction API
+### 2026
+- Real-time prediction API  
+- Federated learning  
+- CT-scan integration  
 
-Federated learning
+---
 
-CT-scan integration
+## 🤝 Contributing
 
-🤝 Contributing
-Contributions are welcome!
+Contributions are welcome!  
 
-bash
-Copiar código
+```bash
 git checkout -b feature/AmazingFeature
 git commit -m "Add AmazingFeature"
 git push origin feature/AmazingFeature
-Areas for Contribution
-🧠 ML model improvements
+```
+## Areas for Contribution
 
-📊 New visualizations
+- 🧠 ML model improvements
+- 📊 New visualizations
+- 🧩 Code optimization
+- 🧾 Documentation enhancement
 
-🧩 Code optimization
+---
 
-🧾 Documentation enhancement
+## 📄 License
 
-📄 License
-Distributed under the MIT License.
-See the LICENSE file for details.
+Distributed under the **MIT License**.  
+See the [LICENSE](LICENSE) file for details.
 
-📬 Contact
-🐙 GitHub: @aespinosa95
+---
 
-💼 LinkedIn: Asunción Espinosa Sánchez
+## 📬 Contact
 
-🌐 Portfolio: asuncionespinosa.dev
+- 🐙 **GitHub:** [@aespinosa95](https://github.com/aespinosa95)  
+- 💼 **LinkedIn:** [Asunción Espinosa Sánchez](https://www.linkedin.com/in/asuncion-espinosa-sanchez/)  
+- 🌐 **Portfolio:** [asuncionespinosa](espinosasa.wixsite.com/portfolio)  
+- 📁 **Project Link:** [github.com/aespinosa95/lung_cancer](https://github.com/aespinosa95/lung_cancer)  
 
-📁 Project Link: github.com/aespinosa95/lung_cancer
+---
 
 <div align="center">
-⚕️ Disclaimer:
-This platform is for research and educational purposes only.
+
+⚕️ **Disclaimer:**  
+This platform is for **research and educational purposes only**.  
 Predictions should be interpreted by qualified healthcare professionals.
 
-Made using ❤️ Streamlit and Python.
+*Made with ❤️ using Streamlit and Python.*
 
-</div> ```
+</div>
+

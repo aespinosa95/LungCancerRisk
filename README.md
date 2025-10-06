@@ -277,6 +277,6 @@ See the LICENSE file for details.
 This platform is for research and educational purposes only.
 Predictions should be interpreted by qualified healthcare professionals.
 
-Made using Streamlit and Python.
+Made using ❤️ Streamlit and Python.
 
 </div> ```

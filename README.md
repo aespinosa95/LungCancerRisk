@@ -93,12 +93,6 @@ df[binary_cols] = df[binary_cols].replace({1: 0, 2: 1}).astype('uint8')
 
 **Problem:** 87:13 imbalance → biased predictions.  
 
-**Solution:**
-- Stratified sampling in train/test split  
-- StratifiedKFold cross-validation (5 folds)  
-- Evaluation via ROC-AUC & Precision-Recall metrics  
-- Adjustable classification thresholds via Streamlit dashboard  
-
 ---
 
 ### 3️⃣ Feature Scaling
@@ -110,12 +104,6 @@ df['age_scaled'] = StandardScaler().fit_transform(df[['age']])
 ---
 
 ✅ **Result:** Improved convergence for distance-based models (SVM, Logistic Regression).
-
----
-
-### 4️⃣ Duplicate Handling
-
-Removed **33 duplicate entries (10.7%)** → 276 unique samples.
 
 ---
 

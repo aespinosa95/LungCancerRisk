@@ -207,13 +207,13 @@ lung_cancer/
 ├── data/
 │   ├── survey lung cancer.csv
 │   └── survey lung cancer_clean.csv
+├── notebooks/
+│   └── preprocess.ipynb
+│	└── EDA.ipynb
 ├── src/
 │   ├── Home.py
 │   ├── pages/
 │   └── utils/
-├── notebooks/
-│   └── preprocess.ipynb
-│	└── EDA.ipynb
 ├── requirements.txt
 ├── README.md
 └── LICENSE

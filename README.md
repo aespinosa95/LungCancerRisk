@@ -58,7 +58,7 @@ Healthcare professionals can analyze **clinical risk factors**, visualize **data
 ## 📊 Dataset Description
 
 **Source:** Clinical survey (`survey lung cancer.csv`)  
-**Samples:** 309 → 276 after cleaning  
+**Samples:** 309
 **Features:** 16 (15 predictors + 1 target)  
 **Missing Values:** None  
 **Class Imbalance:** 87% cancer, 13% healthy  
@@ -93,12 +93,6 @@ df[binary_cols] = df[binary_cols].replace({1: 0, 2: 1}).astype('uint8')
 
 **Problem:** 87:13 imbalance → biased predictions.  
 
-**Solution:**
-- Stratified sampling in train/test split  
-- StratifiedKFold cross-validation (5 folds)  
-- Evaluation via ROC-AUC & Precision-Recall metrics  
-- Adjustable classification thresholds via Streamlit dashboard  
-
 ---
 
 ### 3️⃣ Feature Scaling
@@ -113,70 +107,57 @@ df['age_scaled'] = StandardScaler().fit_transform(df[['age']])
 
 ---
 
-### 4️⃣ Duplicate Handling
-
-Removed **33 duplicate entries (10.7%)** → 276 unique samples.
-
----
-
 ## 🔬 Exploratory Data Analysis
 
 ### 🧓 Age Differences
-- Cancer: **62.7 ± 8.2**  
-- Healthy: **58.1 ± 9.4**  
-- *t-test:* p < 0.05 → Age is a significant predictor  
-
----
-
-### ⚤ Gender Distribution
-- Males: **72% of cancer patients**  
-- *Chi-square:* p < 0.01 → Significant association  
+- Cancer: **62.95 ± 7.97**  
+- Healthy: **60.74 ± 9.63**  
+- *t-test:* p > 0.05 → Age is not a significant predictor  
 
 ---
 
 ### 🔝 Top 5 Predictive Symptoms
 
-| Symptom | Cancer (%) | Healthy (%) | Odds Ratio | p-value |
-|----------|-------------|--------------|-------------|----------|
-| Yellow Fingers | 91 | 23 | 34.8 | < 0.001 |
-| Anxiety | 89 | 18 | 38.5 | < 0.001 |
-| Wheezing | 92 | 25 | 36.2 | < 0.001 |
-| Shortness of Breath | 88 | 21 | 29.1 | < 0.001 |
-| Coughing | 93 | 27 | 40.3 | < 0.001 |
+| Symptom | Healthy (%) | Cancer (%) | Odds Ratio | p-value |
+|---------|-------------|------------|------------|---------|
+| Allergy | 12.8 | 61.9 | 11.03| < 0.001 |
+| Alcohol consume | 17.9 | 61.1 | 7.18 | < 0.001 |
+| Swallowing difficulty | 12.8 | 51.9 | 7.32| < 0.001 |
+| Wheezing | 23.1 | 60.4 | 5.06 | < 0.001 |
+| Coughing | 25.6 | 62.6 | 4.85 | < 0.001 |
 
 ---
 
 ### 🔗 Correlations
 
-- Wheezing ↔ Shortness of Breath: **r = 0.78**  
-- Coughing ↔ Chest Pain: **r = 0.72**  
-- Smoking ↔ Yellow Fingers: **r = 0.54**
-
+- Anxiety ↔ Yellow Fingers: **r = 0.56**
+- Anxiety ↔ swallowing_difficulty: **r = 0.48**  
+- Gender ↔ Alcohol consume: **r = 0.45**  
+	
 ---
 
 ### 🧩 Clustering Analysis
 
 Unsupervised **K-Means (k=3)** revealed distinct patient profiles:
 
-- **Cluster 0:** High-symptom burden (older, anxiety/fatigue)  
-- **Cluster 1:** Behavioral risk (smoking/alcohol, younger)  
-- **Cluster 2:** Moderate presentation  
+- **Cluster 0:** Smoking men with yellow fingers and fatigue, but no alcohol consumption
+- **Cluster 1:** Wpmen with respiratory symptoms and alcohol consumption.
+- **Cluster 2:** Men and women with yellow fingers and difficulty swallowing.
 
 ---
 
 ## 🎯 Key Findings
 
-- 13 binary symptoms significantly associated (*p < 0.05*)  
-- Age and Gender are key demographic predictors  
+- 10 binary symptoms significantly associated (*p < 0.05*)   
 - **Top Model:** Gradient Boosting  
 
 | Metric | Score | Interpretation |
 |---------|-------|----------------|
-| ROC-AUC | 0.947 | Excellent discrimination |
-| Accuracy | 91.3% | High correctness |
-| Precision | 94.8% | Few false positives |
-| Recall | 95.1% | Few missed cases |
-| F1-Score | 0.950 | Balanced performance |
+| ROC-AUC | 0.959 | Excellent discrimination |
+| Accuracy | 91% | High correctness |
+| Precision | 96.9% | Few false positives |
+| Recall | 92.6% | Few missed cases |
+| F1-Score | 0.947 | Balanced performance |
 
 ---
 
@@ -232,6 +213,7 @@ lung_cancer/
 │   └── utils/
 ├── notebooks/
 │   └── preprocess.ipynb
+│	└── EDA.ipynb
 ├── requirements.txt
 ├── README.md
 └── LICENSE
@@ -249,38 +231,10 @@ lung_cancer/
 | Scikit-learn | ML algorithms |
 | Plotly / Matplotlib / Seaborn | Visualization |
 | SciPy | Statistical testing |
+ 
 
 ---
 
-## 🔮 Future Enhancements
-
-### Q2 2025
-- SHAP explainability  
-- EHR integration  
-- PDF clinical reports  
-- Multilingual UI  
-
-### Q3–Q4 2025
-- Deep Learning & XGBoost  
-- Survival analysis  
-- External dataset validation  
-
-### 2026
-- Real-time prediction API  
-- Federated learning  
-- CT-scan integration  
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome!  
-
-```bash
-git checkout -b feature/AmazingFeature
-git commit -m "Add AmazingFeature"
-git push origin feature/AmazingFeature
-```
 ## Areas for Contribution
 
 - 🧠 ML model improvements

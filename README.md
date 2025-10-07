@@ -213,6 +213,7 @@ lung_cancer/
 │   └── utils/
 ├── notebooks/
 │   └── preprocess.ipynb
+│	└── EDA.ipynb
 ├── requirements.txt
 ├── README.md
 └── LICENSE
